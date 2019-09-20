@@ -1,0 +1,117 @@
+svg {
+    /* for debugging */
+    background-color: goldenrod;
+}
+
+
+/* .headline h1 {
+    padding-top: 15%;
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 10vh;
+} */
+
+
+/* .headline h4 {
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 6vh;
+} */
+
+
+/* .author__head {
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    padding-bottom: 35%;
+    font-size: 2vh;
+} */
+
+section {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+}
+
+
+/* article {
+    padding: 0 1rem;
+    margin: 0 auto;
+    max-width: 40rem;
+} */
+
+
+/* article p {
+    font-family: Georgia;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    min-height: 90vh;
+    margin: 0;
+} */
+
+
+/* article p:not(:last-of-type) {
+    margin: 0 0 1rem;
+} */
+
+figure {
+    align-items: center;
+    align-self: flex-start;
+    display: flex;
+    height: 100vh;
+    margin: 0;
+    width: 100%;
+    justify-content: center;
+    top: 0;
+    z-index: -1;
+}
+
+@media screen and (min-width: 35rem) {
+    figure {
+        position: sticky;
+    }
+}
+
+.graphic__one {
+    width: 75vw;
+    height: 75vh;
+}
+
+
+/* .label {
+    font-size: 10px;
+} */
+
+.tick line {
+    opacity: 0.2;
+    stroke-dasharray: 5 5;
+}
+
+
+ .line {
+	fill: none;
+	stroke: black;
+    stroke-width: 1px;
+}
+
+
+/* .circles {
+    stroke: #fff;
+}
+
+.y label {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1vh;
+} */
+
+
+/* .grid line {
+    stroke: lightgrey;
+    stroke-opacity: 0.6;
+    shape-rendering: crispEdges
+} */
+
+
+/* .grid path {
+    stroke-width: 0;
+} */
