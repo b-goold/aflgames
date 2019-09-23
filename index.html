@@ -1,37 +1,50 @@
-<!doctype html>
-
-<html lang="en">
-
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" href="#">
-
-
-</head>
-
-<body>
-    <!-- js -->
-    <section>
-        <figure>
-            <div class='graphic'>
-                <div class='graphic__inner'>
-                    <svg class='graphic__one'></svg>
-                </div>
-            </div>
-        </figure>
-    </section>
-
-
-
-
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <!-- <script src="script.js"></script> -->
-    <script src='interactive.js'></script>
-</body>
-
-</html>
+<!doctype html><html lang="en"><head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+			<link rel="stylesheet" href="style.css">
+				<link rel="shortcut icon" href="#">
+				</head>
+				<body>
+					<!-- js -->
+					<section>
+						<select id="selector" onload="select(this)" onchange="select(this)">
+							<option data-colour="#004b8d">Adelaide</option>
+							<option data-colour="#781527">Brisbane Bears</option>
+							<option data-colour="#5e0537">Brisbane Lions</option>
+							<option data-colour="#011c39">Carlton</option>
+							<option data-colour="#000000">Collingwood</option>
+							<option data-colour="#d50332">Essendon</option>
+							<option data-colour="#ee141f">Fitzroy</option>
+							<option data-colour="#23357f">Footscray</option>
+							<option data-colour="#250553">Fremantle</option>
+							<option data-colour="#0a2343">Geelong</option>
+							<option data-colour="#ff0101">Gold Coast</option>
+							<option data-colour="#fd7b01">Greater Western Sydney</option>
+							<option data-colour="#572500">Hawthorn</option>
+							<option data-colour="#061a33">Melbourne</option>
+							<option data-colour="#01329b">North Melbourne</option>
+							<option data-colour="#00a1a6">Port Adelaide</option>
+							<option data-colour="#000000">Richmond</option>
+							<option data-colour="#ed171f">South Melbourne</option>
+							<option data-colour="#df232e">St Kilda</option>
+							<option data-colour="#ed171f">Sydney</option>
+							<option data-colour="#063579">University</option>
+							<option data-colour="#00468c">West Coast</option>
+							<option data-colour="#0038a4">Western Bulldogs</option>
+						</select>
+						<figure>
+							<div class='graphic'>
+								<div class='graphic__inner'>
+									<svg class='graphic__one'></svg>
+								</div>
+							</div>
+						</figure>
+					</section>
+					<script src="https://d3js.org/d3.v5.min.js"></script>
+					<!-- <script src="script.js"></script> -->
+					<script src='interactive.js'></script>
+				</body>
+			</html>
