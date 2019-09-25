@@ -4,6 +4,14 @@ const $svg = $chart.select('.graphic__one');
 const $selector = document.getElementById('selector');
 
 
+// A function that set idleTimeOut to null
+var idleTimeout
+
+function idled() {
+    idleTimeout = null;
+}
+
+
 // const MARGIN = { top: 50, right: 200, bottom: 50, left: 200 };
 const MARGIN = {
     top: 10,
@@ -12,7 +20,6 @@ const MARGIN = {
     right: 10
 };
 
-// const FONT_SIZE = 12;
 
 function select(selector) {
     d3.selectAll(".line")
@@ -51,12 +58,13 @@ function drawChart(width, height) {
         .attr("transform", "translate(" + MARGIN.left + "," + MARGIN.top + ")")
 
 
+
     // x axis
     const x = d3.scaleTime()
         .domain([new Date(1897, 0, 1), new Date(2020, 0, 1)])
         .range([50, width - 50]);
 
-    $svg
+    var xAxis = $svg
         .append('g')
         .attr('class', 'x axis')
         .attr('transform', `translate(0,${height*1.03})`) //40, height*1.0515
@@ -90,6 +98,18 @@ function drawChart(width, height) {
         .call(g => g.selectAll(".tick text")
             .attr("x", 4)
             .attr("dy", -4))
+
+
+    // define brushing
+    var brush = d3.brushX() // Add the brush feature using the d3.brush function
+        .extent([
+            [0, 0],
+            [width, height]
+        ]) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+        .on("end", updateChart) // Each time the brush selection changes, trigger the 'updateChart' function
+
+
+
 
     //--------------- ADD CODE BELOW ------------------ //
     //Load the data
@@ -128,7 +148,46 @@ function drawChart(width, height) {
             });
 
             select($selector); //load the default selected team
+
+            // Add the brushing
+            $svg.append("g")
+                .attr("class", "brush")
+                .call(brush);
         });
+
+
+    // A function that update the chart for given boundaries
+    function updateChart() {
+
+        extent = d3.event.selection
+
+        // If no selection, back to initial coordinate. Otherwise, update X axis domain
+        if (!extent) {
+            if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
+            x.domain([new Date(1897, 0, 1), new Date(2020, 0, 1)])
+        } else {
+            x.domain([x.invert(extent[0]), x.invert(extent[1])])
+            $svg.select(".brush")
+                .style("z-index", "999")
+                .call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
+        }
+
+        // Update axis and circle position
+        xAxis.transition().duration(1000).call(d3.axisBottom(x))
+        $svg
+            .selectAll(".line")
+            .transition().duration(1000)
+            .attr("d", d3.line()
+                .x(function(d) {
+                    return x(d.date)
+                })
+                .y(function(d) {
+                    return y(d.elo)
+                })
+            )
+
+    }
+
 
     function drawLine(team, filteredData, xScale, yScale) {
         var lineData;
@@ -190,6 +249,7 @@ function drawChart(width, height) {
 
         //append the path, bind the data, call the line generator
         $svg.append("path")
+            .attr("clip-path", "url(#clip)") //this enables brushing
             .datum(mergedData) // 10. Binds data to the line 
             .attr("class", "line inactive") // Assign a class for styling 
             .attr('id', team) //Assign team name for dynamic selection and styling
@@ -201,6 +261,8 @@ function drawChart(width, height) {
 }
 
 
+
+
 function init() {
 
     $svg
@@ -209,6 +271,8 @@ function init() {
 
     window.addEventListener('resize', resize);
     resize();
+
+
 
 }
 
