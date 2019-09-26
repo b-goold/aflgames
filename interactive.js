@@ -47,16 +47,28 @@ function resize() {
 
 
 function drawChart(width, height) {
+    
+    //Disable the selector to avoid null input error
+    $selector.disabled=true;
 
+    //remove all elements on svg
     $svg.selectAll("*").remove();
 
     //define new svg height and width
     $svg
-        .attr('width', width) // + MARGIN.left + MARGIN.right)
+        .attr('width', width + MARGIN.left) //+ MARGIN.left + MARGIN.right)
         .attr('height', height) // + MARGIN.top + MARGIN.bottom)
         .append('g')
         .attr("transform", "translate(" + MARGIN.left + "," + MARGIN.top + ")")
-
+        
+        
+    //Display loading message
+        .append("text")
+        .attr("id","loading")
+        .attr('transform', `translate(${width/2},${height/2})`)
+        .style("text-anchor","middle")
+        .style("font-size","20px")
+        .text("Loading lots of data... Please wait...");
 
 
     // x axis
@@ -67,7 +79,7 @@ function drawChart(width, height) {
     var xAxis = $svg
         .append('g')
         .attr('class', 'x axis')
-        .attr('transform', `translate(0,${height*1.03})`) //40, height*1.0515
+        .attr('transform', `translate(0,${height})`) //40, height*1.0515
         .call(d3.axisBottom(x)
             .ticks(d3.timeYear.every(10))
             .tickSizeInner(-height * 1.1)
@@ -76,6 +88,14 @@ function drawChart(width, height) {
         .call(g => g.select(".domain")
             .remove())
         .call(g => g.selectAll(".tick:not(:first-of-type) line"))
+        
+    //x label
+    /*
+    $svg
+        .append("text")
+        .attr('transform', `translate(${width/2},${height+30})`) //40, height*1.0515
+        .style("font-size","12px")
+        .text("Year"); */
 
 
 
@@ -83,7 +103,16 @@ function drawChart(width, height) {
     const y = d3.scaleLinear()
         .domain([1000, 2000])
         .range([height, 0])
-
+        
+    //Y label
+    /*
+      $svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - MARGIN.left)
+        .attr("x",0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Elo Rating"); */
 
     $svg
         .append('g')
@@ -105,7 +134,7 @@ function drawChart(width, height) {
         .extent([
             [0, 0],
             [width, height]
-        ]) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+        ]) // initialise the brush area
         .on("end", updateChart) // Each time the brush selection changes, trigger the 'updateChart' function
 
 
@@ -141,12 +170,15 @@ function drawChart(width, height) {
             allTeams.forEach(function(team) {
                 const filtered = data.filter(info => info.team_1 == team || info.team_2 == team);
 
-                //console.log(filtered);
-
                 //Send filtered data to the chart for initial drawing
                 drawLine(team, filtered, x, y);
             });
-
+            
+            //remove the loading text
+            document.getElementById('loading').remove();
+            
+            //enable the selector for user input
+            $selector.disabled=false;
             select($selector); //load the default selected team
 
             // Add the brushing
@@ -163,13 +195,13 @@ function drawChart(width, height) {
 
         // If no selection, back to initial coordinate. Otherwise, update X axis domain
         if (!extent) {
-            if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
+            if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // Wait a little bit
             x.domain([new Date(1897, 0, 1), new Date(2020, 0, 1)])
         } else {
             x.domain([x.invert(extent[0]), x.invert(extent[1])])
             $svg.select(".brush")
                 .style("z-index", "999")
-                .call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
+                .call(brush.move, null) // remove the grey brush area as soon as the selection has been done
         }
 
         // Update axis and circle position
@@ -193,7 +225,6 @@ function drawChart(width, height) {
         var lineData;
         var mergedData = [];
 
-        console.log("Generating line for " + team + "...");
         var i = 0;
 
         filteredData.forEach(function(teamData) {
@@ -235,9 +266,6 @@ function drawChart(width, height) {
             }
         });
 
-        //console.log("This is the data for " + team + ":");
-        //console.log(mergedData);
-
         //prepare the team line
         var line = d3.line() //translate the line!
             .x(function(d) {
@@ -249,11 +277,11 @@ function drawChart(width, height) {
 
         //append the path, bind the data, call the line generator
         $svg.append("path")
-            .attr("clip-path", "url(#clip)") //this enables brushing
-            .datum(mergedData) // 10. Binds data to the line 
+            .attr("clip-path", "url(#clip)") //Enable brushing
+            .datum(mergedData) // Bind data to the line 
             .attr("class", "line inactive") // Assign a class for styling 
             .attr('id', team) //Assign team name for dynamic selection and styling
-            .attr("d", line); // 11. Calls the line generator
+            .attr("d", line); // Call the line generator
     };
 
 
@@ -271,8 +299,6 @@ function init() {
 
     window.addEventListener('resize', resize);
     resize();
-
-
 
 }
 
